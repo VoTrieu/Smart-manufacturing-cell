@@ -94,7 +94,6 @@ The HMI uses a **1024 × 768** layout and direct controller references through t
 
 Two additional popups confirm **Clear Cell** and **Reset Statistics**. The Alarms screen presents current PLC faults and recovery permissions. Historical alarm logging and trends are outside this version's scope.
 
-<details>
 <summary>View Manual, Alarms, Diagnostics and Settings screenshots</summary>
 
 ### Manual control
@@ -115,7 +114,6 @@ The Manual page can be viewed while Auto is active. Manual equipment operation s
 
 ![Settings screen with fill and inspection durations and production measurements](hmi/screenshots/settings.png)
 
-</details>
 
 These screenshots show the FactoryTalk application. Approximate generated layout previews are kept separately in `hmi/previews/`.
 
