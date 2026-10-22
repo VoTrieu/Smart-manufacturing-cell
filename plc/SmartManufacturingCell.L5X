@@ -1,0 +1,4261 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.03" TargetName="SmartManufacturingCell" TargetType="Controller" ContainsContext="false" ExportDate="Thu Oct 22 18:27:57 2026" ExportOptions="NoRawData L5KData DecoratedData ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Target" Name="SmartManufacturingCell" ProcessorType="Emulate 5570" MajorRev="33" MinorRev="11" TimeSlice="20" ShareUnusedTimeSlice="1" ProjectCreationDate="Wed Oct 21 22:07:23 2026" LastModifiedDate="Wed Oct 21 22:09:13 2026" SFCExecutionControl="CurrentActive" SFCRestartPosition="MostRecent"
+ SFCLastScan="DontScan" ProjectSN="16#7024_3ff3" MatchProjectToController="false" CanUseRPIFromProducer="false" InhibitAutomaticFirmwareUpdate="0" PassThroughConfiguration="EnabledWithAppend" DownloadProjectDocumentationAndExtendedProperties="true" DownloadProjectCustomProperties="true" ReportMinorOverflow="false">
+<Description>
+<![CDATA[Simulation only. Core cell candidate; acceptance pending.]]>
+</Description>
+<RedundancyInfo Enabled="false" KeepTestEditsOnSwitchOver="false" IOMemoryPadPercentage="90" DataTablePadPercentage="50"/>
+<Security Code="0" ChangesToDetect="16#ffff_ffff_ffff_ffff"/>
+<SafetyInfo/>
+<DataTypes>
+<DataType Name="UDT_Bottle" Family="NoFamily" Class="User">
+<Description>
+<![CDATA[Bottle record]]>
+</Description>
+<Members>
+<Member Name="ZZZZZZZZZZUDT_Bottle0" DataType="SINT" Dimension="0" Radix="Decimal" Hidden="true" ExternalAccess="Read/Write"/>
+<Member Name="Occupied" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_Bottle0" BitNumber="0" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[A tracked bottle occupies this position]]>
+</Description>
+</Member>
+<Member Name="FillComplete" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_Bottle0" BitNumber="1" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[This bottle completed filling]]>
+</Description>
+</Member>
+<Member Name="InspectionComplete" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_Bottle0" BitNumber="2" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[This bottle has a valid inspection result]]>
+</Description>
+</Member>
+<Member Name="RejectRequired" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_Bottle0" BitNumber="3" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Inspection determined this bottle must be rejected]]>
+</Description>
+</Member>
+</Members>
+</DataType>
+</DataTypes>
+<Modules>
+<Module Name="Local" CatalogNumber="Emulate 5570" Vendor="1" ProductType="14" ProductCode="53" Major="33" Minor="11" ParentModule="Local" ParentModPortId="1" Inhibited="false" MajorFault="true"
+>
+<EKey State="ExactMatch"/>
+<Ports>
+<Port Id="1" Address="4" Type="ICP" Upstream="false">
+<Bus Size="10"/>
+</Port>
+</Ports>
+</Module>
+</Modules>
+<AddOnInstructionDefinitions/>
+<Tags>
+<Tag Name="Cfg_FillTimeMs" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Fill duration; 100..3000 ms. Sampled when filling starts.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1500]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="1500"/>
+</Data>
+</Tag>
+<Tag Name="Cfg_InspectionTimeMs" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Inspection duration; 100..2000 ms. Sampled when inspection starts.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[500]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="500"/>
+</Data>
+</Tag>
+<Tag Name="Conveyor_Flt_FailToStart" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Conveyor commanded but running feedback missing for 2 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Conveyor_Sts_ResetAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[One-execution indication that conveyor fault reset was accepted.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Exit_Flt_DischargeTimeout" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Good or reject bottle departure not confirmed within 3 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Exit_Sts_GoodCompletePulse" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Exit Sts GoodCompletePulse]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Exit_Sts_RejectCompletePulse" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Exit Sts RejectCompletePulse]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Exit_Sts_ResetAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Exit Sts ResetAccepted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Exit_Sts_State" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[0 Empty; 10 Waiting; 20 Good discharge; 30 Extending; 40 Reject discharge; 50 Retracting; 60 Complete; 90 Faulted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Filling_Flt_FillTimeout" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Fill completion not received within 4 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Filling_Flt_ValveFailToClose" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Fill valve did not close within 2 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Filling_Sts_ActiveFillTimeMs" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sampled fill duration for current bottle]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1500]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="1500"/>
+</Data>
+</Tag>
+<Tag Name="Filling_Sts_ResetAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Filling Sts ResetAccepted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Filling_Sts_State" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[0 Empty; 10 Waiting; 20 Filling; 30 Closing; 40 Complete; 90 Faulted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_Acknowledge" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Acknowledge alarm indication; does not reset faults]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_ClearCell" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Request removal of simulated bottles during fault recovery]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_ConveyorJog" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Request conveyor movement while held]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_FillValveOpen" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_LoadBottle" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Request one simulated bottle at the available entry position]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_RejectExtend" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_Reset" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Request fault reset after recovery conditions are satisfied]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_ResetStatistics" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Clear production statistics only when Stopped and cell empty]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_SelectAuto" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Request Auto mode]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_SelectManual" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Request Manual mode]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_Start" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Request automatic production start]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Cmd_Stop" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Request controlled production stop]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_BottleMissingAtFill" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Suppress Fill photoeye while retaining simulated bottle presence. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_ConveyorFailToStart" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Suppress conveyor running feedback. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_FillFailToComplete" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Suppress simulated filling completion. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_FillValveFailToClose" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Suppress fill valve closed feedback. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_GoodDischargeJam" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Prevent good bottle departure. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_IndexJam" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Prevent simulated index travel from completing. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_IndexPositionMismatch" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Invert simulated Fill occupancy on transfer to test confirmation. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_InspectionFailToComplete" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Prevent inspection process timer from completing. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_NextInspectionRejects" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Select Reject for the next inspection]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_RejectDischargeJam" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Prevent rejected bottle departure. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_RejectFailToExtend" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Suppress reject extended feedback. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="HMI_Sim_RejectFailToRetract" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Suppress reject retracted feedback. Simulation test only.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Inspection_Flt_Timeout" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Inspection did not finish within 3 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Inspection_Sts_ResetAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Inspection Sts ResetAccepted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Inspection_Sts_State" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[0 Empty; 10 Waiting; 20 Inspecting; 40 Complete; 90 Faulted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Bottles" TagType="Base" DataType="UDT_Bottle" Dimensions="4" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[[[0],[0],[0],[0]]]]>
+</Data>
+<Data Format="Decorated">
+<Array DataType="UDT_Bottle" Dimensions="4">
+<Element Index="[0]">
+<Structure DataType="UDT_Bottle">
+<DataValueMember Name="Occupied" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FillComplete" DataType="BOOL" Value="0"/>
+<DataValueMember Name="InspectionComplete" DataType="BOOL" Value="0"/>
+<DataValueMember Name="RejectRequired" DataType="BOOL" Value="0"/>
+</Structure>
+</Element>
+<Element Index="[1]">
+<Structure DataType="UDT_Bottle">
+<DataValueMember Name="Occupied" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FillComplete" DataType="BOOL" Value="0"/>
+<DataValueMember Name="InspectionComplete" DataType="BOOL" Value="0"/>
+<DataValueMember Name="RejectRequired" DataType="BOOL" Value="0"/>
+</Structure>
+</Element>
+<Element Index="[2]">
+<Structure DataType="UDT_Bottle">
+<DataValueMember Name="Occupied" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FillComplete" DataType="BOOL" Value="0"/>
+<DataValueMember Name="InspectionComplete" DataType="BOOL" Value="0"/>
+<DataValueMember Name="RejectRequired" DataType="BOOL" Value="0"/>
+</Structure>
+</Element>
+<Element Index="[3]">
+<Structure DataType="UDT_Bottle">
+<DataValueMember Name="Occupied" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FillComplete" DataType="BOOL" Value="0"/>
+<DataValueMember Name="InspectionComplete" DataType="BOOL" Value="0"/>
+<DataValueMember Name="RejectRequired" DataType="BOOL" Value="0"/>
+</Structure>
+</Element>
+</Array>
+</Data>
+</Tag>
+<Tag Name="Production_Flt_IndexConfirmTimeout" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Post-index positions not confirmed within 1 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Flt_IndexInterlock" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Movement interlock lost during indexing Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Flt_IndexTimeout" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Index completion not received within 3 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Flt_InvalidConfiguration" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Fill or inspection time outside permitted limits Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Flt_InvalidState" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Machine, sequence, station state, or mode combination invalid Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Flt_StartupRecoveryRequired" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Restart found bottles or interrupted activity Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Flt_TrackingMismatch" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Stationary bottle tracking and sensors disagree or processing history invalid Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_FaultSeconds" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[FaultSeconds based on 20 ms scheduled executions; not a wall-clock historian.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_GoodCount" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Retained GoodCount; count only confirmed departures (recovery losses separate).]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[2]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="2"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_LastCycleSeconds" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[LastCycleSeconds based on 20 ms scheduled executions; not a wall-clock historian.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[3.01805000e+001]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="30.1805"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_RatePerMinute" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[RatePerMinute based on 20 ms scheduled executions; not a wall-clock historian.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_RecoveryLossCount" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Retained RecoveryLossCount; count only confirmed departures (recovery losses separate).]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_RejectCount" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Retained RejectCount; count only confirmed departures (recovery losses separate).]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_RunSeconds" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[RunSeconds based on 20 ms scheduled executions; not a wall-clock historian.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[2.14953467e+003]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="2149.5347"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_StoppedSeconds" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[StoppedSeconds based on 20 ms scheduled executions; not a wall-clock historian.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1.22176543e+004]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="12217.654"/>
+</Data>
+</Tag>
+<Tag Name="Production_Stats_TotalCount" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Retained TotalCount; count only confirmed departures (recovery losses separate).]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[2]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="2"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_ClearCellAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_ClearCellAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_CounterSaturated" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Production Sts CounterSaturated]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_IndexAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_IndexCommitted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Bottle records transferred for the current confirmed index; cleared outside ConfirmPositions.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_IndexDemand" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_IndexPositionsMatch" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Post-index positions verified in ConfirmPositions with conveyor stopped.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_LoadAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_LoadAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_LoadBlockReason" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[0 allowed; 10 not Auto Running/ProcessStations; 20 command conflict; 30 conveyor moving; 40 Entry occupied; 50 fault/startup incomplete]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_ResetAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_SequenceState" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[0 = Idle
+10 = ProcessStations
+20 = Indexing
+30 = ConfirmPositions]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[10]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="10"/>
+</Data>
+</Tag>
+<Tag Name="Production_Sts_StationsReady" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Reject_Flt_FailToExtend" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Reject actuator did not extend within 2 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Reject_Flt_FailToRetract" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Reject actuator did not retract within 2 s Latched; clear cell, remove cause, then fresh Reset.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Reject_Sts_BlockReason" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Reason manual reject extension is unavailable.
+0 = Ready to accept Extend.
+10 = Release Extend to rearm.
+20 = Good-bottle discharge active.
+30 = Conveyor commanded or running.
+40 = Stop request held.
+50 = Machine is not Stopped.
+60 = Mannual mode inactive or Auto Active.
+70 = Blocking fault active.
+99 = Permission unavailable for another reason.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[60]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="60"/>
+</Data>
+</Tag>
+<Tag Name="Reject_Sts_ResetAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_ConveyorRunning" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated conveyor movement feedback]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_EntryPE" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated bottle detected at entry]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_ExitPE" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated bottle detected at Reject/Exit position]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_FillComplete" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sim In FillComplete]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_FillPE" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated bottle detected at filling position]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_FillValveClosed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated fill valve confirmed closed]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_GoodExitPE" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Bottle detected passing through good discharge path]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_IndexComplete" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated conveyor completed one station-spacing movement]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_InspectionPE" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated bottle detected at inspection position]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_RejectExitPE" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Bottle detected passing through reject discharge path]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_RejectExtended" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated reject actuator confirmed extended]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_In_RejectRetracted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Simulated reject actuator confirmed retracted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Sim_Out_ConveyorRun" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Command simulated conveyor to run]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_Out_FillValveOpen" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Command simulated fill valve to open]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_Out_GoodDischargeRun" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Command simulated good-bottle discharge mechanism to run]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_Out_RejectExtend" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Command simulated reject actuator to extend]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_Sts_BottlesPresent" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sim Sts BottlesPresent]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_ActiveAlarmCount" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Number of active latched faults]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_AlarmUnacknowledged" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sys Sts AlarmUnacknowledged]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_AutoMode" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Auto mode accepted and active]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_BlockingFault" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Active blocking fault prevents production and manual equipment operation.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_CellEmpty" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sys Sts CellEmpty]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_EquipmentHome" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sys Sts EquipmentHome]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_FirstFaultCode" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Lowest active fault code; zero means none]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_InjectionsClear" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sys Sts InjectionsClear]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_MachineState" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[0 = Stopped
+10 = Running
+20 = Stopping
+30 = Faulted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[10]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="10"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_ManualMode" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Manual mode accepted and active]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_OperationsIdle" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sys Sts OperationsIdle]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_ResetAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sys Sts ResetAllowed]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_StartAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sys_Sts_StartupReady" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Sys Sts StartupReady]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+</Tags>
+<Programs>
+<Program Name="Program_Conveyor" TestEdits="false" MainRoutineName="MainRoutine" Disabled="false" UseAsFolder="false">
+<Description>
+<![CDATA[Conveyor commands, movement permissives, and index monitoring.]]>
+</Description>
+<Tags>
+<Tag Name="ConveyorResetONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="ConveyorStartTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="Read/Write">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,2000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="2000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="Conveyor_AutoRunAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Conveyor_JogArmed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Conveyor_ManualJogAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Manual conveyor jog is permitted]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Conveyor_MovementAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Equipment conditions permit conveyor movement]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+</Tags>
+<Routines>
+<Routine Name="Conveyor_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIO(Conveyor_Flt_FailToStart)XIC(Sim_In_FillValveClosed)XIO(Sim_Out_FillValveOpen)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)XIO(Sim_Out_RejectExtend)XIO(Sim_Out_GoodDischargeRun)OTE(Conveyor_MovementAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(Conveyor_MovementAllowed)XIC(Sys_Sts_ManualMode)XIO(Sys_Sts_AutoMode)EQU(Sys_Sts_MachineState,0)XIO(HMI_Cmd_Stop)OTE(Conveyor_ManualJogAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(Conveyor_ManualJogAllowed)OTU(Conveyor_JogArmed);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Conveyor_ManualJogAllowed)XIO(HMI_Cmd_ConveyorJog)OTL(Conveyor_JogArmed);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[Stop completes an active index; IndexAllowed is only an initiation permission.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(Conveyor_MovementAllowed)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Production_Sts_SequenceState,20)XIO(Sim_In_IndexComplete)OTE(Conveyor_AutoRunAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[[XIC(Conveyor_ManualJogAllowed) XIC(HMI_Cmd_ConveyorJog) XIC(Conveyor_JogArmed) ,XIC(Conveyor_AutoRunAllowed) ]OTE(Sim_Out_ConveyorRun);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Conveyor_Faults" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[ONS precedes permission: an invalid held request cannot reset later automatically.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(HMI_Cmd_Reset)ONS(ConveyorResetONS)XIC(Conveyor_Flt_FailToStart)XIC(Sys_Sts_ResetAllowed)[OTU(Conveyor_Flt_FailToStart) ,OTE(Conveyor_Sts_ResetAccepted) ];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)TON(ConveyorStartTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(ConveyorStartTimeout.DN)OTL(Conveyor_Flt_FailToStart);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="MainRoutine" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Conveyor_Faults,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Conveyor_Control,0);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+<Program Name="Program_Filling" TestEdits="false" MainRoutineName="MainRoutine" Disabled="false" UseAsFolder="false">
+<Description>
+<![CDATA[Filling station valve control, timing, permissives, and faults.]]>
+</Description>
+<Tags>
+<Tag Name="FillingResetONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="FillProcessTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,4000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="4000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="FillValveCloseTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,2000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="2000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="Fill_AutoOpenAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Fill_ManualOpenAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Fill_ManualOpenArmed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Fill_StateAtScan" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+</Tags>
+<Routines>
+<Routine Name="Filling_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIC(Sys_Sts_ManualMode)XIO(Sys_Sts_AutoMode)EQU(Sys_Sts_MachineState,0)XIO(Sys_Sts_BlockingFault)XIO(HMI_Cmd_Stop)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIO(Filling_Flt_ValveFailToClose)XIO(Filling_Flt_FillTimeout)OTE(Fill_ManualOpenAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(Fill_ManualOpenAllowed)OTU(Fill_ManualOpenArmed);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(Fill_ManualOpenAllowed)XIO(HMI_Cmd_FillValveOpen)OTL(Fill_ManualOpenArmed);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)EQU(Filling_Sts_State,20)XIC(Production_Bottles[1].Occupied)XIC(Sim_In_FillPE)XIO(Filling_Flt_ValveFailToClose)XIO(Filling_Flt_FillTimeout)OTE(Fill_AutoOpenAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[[XIC(Fill_ManualOpenAllowed) XIC(Fill_ManualOpenArmed) XIC(HMI_Cmd_FillValveOpen) ,XIC(Fill_AutoOpenAllowed) ]OTE(Sim_Out_FillValveOpen);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Filling_Faults" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[ONS precedes permission: an invalid held request cannot reset later automatically.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(HMI_Cmd_Reset)ONS(FillingResetONS)[XIC(Filling_Flt_ValveFailToClose) ,XIC(Filling_Flt_FillTimeout) ]XIC(Sys_Sts_ResetAllowed)[OTU(Filling_Flt_ValveFailToClose) ,OTU(Filling_Flt_FillTimeout) ,OTE(Filling_Sts_ResetAccepted) ];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(Sim_Out_FillValveOpen)XIO(Sim_In_FillValveClosed)TON(FillValveCloseTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(FillValveCloseTimeout.DN)OTL(Filling_Flt_ValveFailToClose);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Filling_Sts_State,20)XIO(Sim_In_FillComplete)TON(FillProcessTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIC(FillProcessTimeout.DN)OTL(Filling_Flt_FillTimeout);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Filling_Sequence" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[MOV(Filling_Sts_State,Fill_StateAtScan);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Clear station activity during transfer; the next bottle brings its own completion flags.]]>
+</Comment>
+<Text>
+<![CDATA[EQU(Production_Sts_SequenceState,20)MOV(0,Filling_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)MOV(0,Filling_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[[XIC(Sys_Sts_BlockingFault) ,XIC(Filling_Flt_FillTimeout) ,XIC(Filling_Flt_ValveFailToClose) ]MOV(90,Filling_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIO(Sys_Sts_BlockingFault)XIO(Filling_Flt_FillTimeout)XIO(Filling_Flt_ValveFailToClose)XIO(Production_Bottles[1].Occupied)NEQ(Filling_Sts_State,20)NEQ(Filling_Sts_State,30)MOV(0,Filling_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIO(Sys_Sts_BlockingFault)EQU(Production_Sts_SequenceState,10)XIC(Production_Bottles[1].Occupied)EQU(Fill_StateAtScan,0)MOV(10,Filling_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIC(Production_Bottles[1].Occupied)XIC(Sim_In_FillPE)EQU(Fill_StateAtScan,10)XIC(Production_Bottles[1].FillComplete)MOV(40,Filling_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIC(Production_Bottles[1].Occupied)XIC(Sim_In_FillPE)EQU(Fill_StateAtScan,10)XIO(Production_Bottles[1].FillComplete)XIO(Filling_Flt_FillTimeout)XIO(Filling_Flt_ValveFailToClose)[MOV(Cfg_FillTimeMs,Filling_Sts_ActiveFillTimeMs) ,MOV(20,Filling_Sts_State) ];]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Fill_StateAtScan,20)XIO(Filling_Flt_FillTimeout)XIO(Filling_Flt_ValveFailToClose)XIC(Sim_In_FillComplete)MOV(30,Filling_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Fill_StateAtScan,30)XIO(Filling_Flt_FillTimeout)XIO(Filling_Flt_ValveFailToClose)XIO(Sim_Out_FillValveOpen)XIC(Sim_In_FillValveClosed)[OTL(Production_Bottles[1].FillComplete) ,MOV(40,Filling_Sts_State) ];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="MainRoutine" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Filling_Faults,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Filling_Sequence,0);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Filling_Control,0);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+<Program Name="Program_Inspection" TestEdits="false" MainRoutineName="MainRoutine" Disabled="false" UseAsFolder="false">
+<Description>
+<![CDATA[Simulated inspection, reject actuator, and bottle discharge control.]]>
+</Description>
+<Tags>
+<Tag Name="ExitDischargeTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,3000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="3000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="ExitResetONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Exit_StateAtScan" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="InspectionProcessDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,500,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="InspectionResetONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="InspectionTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,3000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="3000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="Inspection_RejectSample" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Inspection_StateAtScan" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="RejectExtendTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,2000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="2000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="RejectResetONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="RejectRetractTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,2000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="2000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="Reject_AutoExtendAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Reject_ManualExtendAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Reject_ManualExtendArmed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Reject_ResetAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Reject recovery conditions satisfied; permits a fresh Reset request.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+</Tags>
+<Routines>
+<Routine Name="Exit_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[MOV(Exit_Sts_State,Exit_StateAtScan);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)MOV(0,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[[XIC(Sys_Sts_BlockingFault) ,XIC(Exit_Flt_DischargeTimeout) ,XIC(Reject_Flt_FailToExtend) ,XIC(Reject_Flt_FailToRetract) ]MOV(90,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIO(Sys_Sts_BlockingFault)XIO(Exit_Flt_DischargeTimeout)XIO(Reject_Flt_FailToExtend)XIO(Reject_Flt_FailToRetract)XIO(Production_Bottles[3].Occupied)[EQU(Exit_Sts_State,0) ,EQU(Exit_Sts_State,10) ,EQU(Exit_Sts_State,60) ,EQU(Exit_Sts_State,90) ]MOV(0,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIO(Sys_Sts_BlockingFault)XIC(Production_Bottles[3].Occupied)EQU(Exit_StateAtScan,0)MOV(10,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)EQU(Exit_StateAtScan,10)XIC(Production_Bottles[3].Occupied)XIC(Sim_In_ExitPE)XIC(Production_Bottles[3].InspectionComplete)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)XIO(Production_Bottles[3].RejectRequired)MOV(20,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)EQU(Exit_StateAtScan,10)XIC(Production_Bottles[3].Occupied)XIC(Sim_In_ExitPE)XIC(Production_Bottles[3].InspectionComplete)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)XIC(Production_Bottles[3].RejectRequired)MOV(30,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Exit_StateAtScan,30)XIC(Sim_In_RejectExtended)XIO(Reject_Flt_FailToExtend)MOV(40,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Exit_StateAtScan,20)EQU(Exit_Sts_State,20)XIC(Production_Bottles[3].Occupied)XIC(Sim_In_GoodExitPE)XIO(Sim_In_ExitPE)XIO(Exit_Flt_DischargeTimeout)OTE(Exit_Sts_GoodCompletePulse);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Exit_StateAtScan,40)EQU(Exit_Sts_State,40)XIC(Production_Bottles[3].Occupied)XIC(Sim_In_RejectExitPE)XIO(Sim_In_ExitPE)XIO(Exit_Flt_DischargeTimeout)OTE(Exit_Sts_RejectCompletePulse);]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Text>
+<![CDATA[XIC(Exit_Sts_GoodCompletePulse)MOV(60,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Text>
+<![CDATA[XIC(Exit_Sts_RejectCompletePulse)MOV(50,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Exit_StateAtScan,50)EQU(Exit_Sts_State,50)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)XIO(Sim_Out_RejectExtend)MOV(60,Exit_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)EQU(Exit_Sts_State,20)XIO(Exit_Flt_DischargeTimeout)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)OTE(Sim_Out_GoodDischargeRun);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Exit_Faults" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[ONS precedes permission: an invalid held request cannot reset later automatically.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(HMI_Cmd_Reset)ONS(ExitResetONS)XIC(Exit_Flt_DischargeTimeout)XIC(Sys_Sts_ResetAllowed)[OTU(Exit_Flt_DischargeTimeout) ,OTE(Exit_Sts_ResetAccepted) ];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ][EQU(Exit_Sts_State,20) XIO(Sim_In_GoodExitPE) ,EQU(Exit_Sts_State,40) XIO(Sim_In_RejectExitPE) ]TON(ExitDischargeTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(ExitDischargeTimeout.DN)OTL(Exit_Flt_DischargeTimeout);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Inspection_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[MOV(Inspection_Sts_State,Inspection_StateAtScan);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[EQU(Production_Sts_SequenceState,20)MOV(0,Inspection_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)[MOV(0,Inspection_Sts_State) ,OTU(Inspection_RejectSample) ];]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[[XIC(Sys_Sts_BlockingFault) ,XIC(Inspection_Flt_Timeout) ]MOV(90,Inspection_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIO(Sys_Sts_BlockingFault)XIO(Inspection_Flt_Timeout)XIO(Production_Bottles[2].Occupied)MOV(0,Inspection_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIO(Sys_Sts_BlockingFault)EQU(Production_Sts_SequenceState,10)XIC(Production_Bottles[2].Occupied)EQU(Inspection_StateAtScan,0)MOV(10,Inspection_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)EQU(Inspection_StateAtScan,10)XIC(Production_Bottles[2].Occupied)XIC(Sim_In_InspectionPE)XIC(Production_Bottles[2].InspectionComplete)MOV(40,Inspection_Sts_State);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[Sample quality and duration once; changes while inspecting affect a later bottle.]]>
+</Comment>
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)EQU(Inspection_StateAtScan,10)XIC(Production_Bottles[2].Occupied)XIC(Sim_In_InspectionPE)XIC(Production_Bottles[2].FillComplete)XIO(Production_Bottles[2].InspectionComplete)XIO(Inspection_Flt_Timeout)[MOV(Cfg_InspectionTimeMs,InspectionProcessDelay.PRE) ,XIC(HMI_Sim_NextInspectionRejects) OTL(Inspection_RejectSample) ,XIO(HMI_Sim_NextInspectionRejects) OTU(Inspection_RejectSample) ,MOV(20,Inspection_Sts_State) ];]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Inspection_Sts_State,20)XIO(HMI_Sim_InspectionFailToComplete)TON(InspectionProcessDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Inspection_StateAtScan,20)XIO(Inspection_Flt_Timeout)XIC(InspectionProcessDelay.DN)[OTL(Production_Bottles[2].InspectionComplete) ,XIC(Inspection_RejectSample) OTL(Production_Bottles[2].RejectRequired) ,XIO(Inspection_RejectSample) OTU(Production_Bottles[2].RejectRequired) ,MOV(40,Inspection_Sts_State) ];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Inspection_Faults" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[ONS precedes permission: an invalid held request cannot reset later automatically.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(HMI_Cmd_Reset)ONS(InspectionResetONS)XIC(Inspection_Flt_Timeout)XIC(Sys_Sts_ResetAllowed)[OTU(Inspection_Flt_Timeout) ,OTE(Inspection_Sts_ResetAccepted) ];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Inspection_Sts_State,20)XIO(InspectionProcessDelay.DN)TON(InspectionTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(InspectionTimeout.DN)OTL(Inspection_Flt_Timeout);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="MainRoutine" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Reject_Faults,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Inspection_Faults,0);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Exit_Faults,0);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Inspection_Control,0);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Exit_Control,0);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Reject_Control,0);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Reject_Diagnostics,0);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Reject_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIC(Sys_Sts_ManualMode)XIO(Sys_Sts_AutoMode)EQU(Sys_Sts_MachineState,0)XIO(Sys_Sts_BlockingFault)XIO(HMI_Cmd_Stop)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIO(Sim_Out_GoodDischargeRun)XIO(Reject_Flt_FailToExtend)XIO(Reject_Flt_FailToRetract)OTE(Reject_ManualExtendAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(Reject_ManualExtendAllowed)OTU(Reject_ManualExtendArmed);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(Reject_ManualExtendAllowed)XIO(HMI_Cmd_RejectExtend)OTL(Reject_ManualExtendArmed);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)[EQU(Exit_Sts_State,30) ,EQU(Exit_Sts_State,40) ]XIO(Sim_Out_GoodDischargeRun)XIO(Reject_Flt_FailToExtend)XIO(Reject_Flt_FailToRetract)XIO(Exit_Flt_DischargeTimeout)OTE(Reject_AutoExtendAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[[XIC(Reject_ManualExtendAllowed) XIC(Reject_ManualExtendArmed) XIC(HMI_Cmd_RejectExtend) ,XIC(Reject_AutoExtendAllowed) ]OTE(Sim_Out_RejectExtend);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Reject_Diagnostics" Type="RLL">
+<Description>
+<![CDATA[Reason manual reject extension is unavailable]]>
+</Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[MOV(99,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(Reject_ManualExtendAllowed)XIC(Reject_ManualExtendArmed)MOV(0,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(Reject_ManualExtendAllowed)XIO(Reject_ManualExtendArmed)MOV(10,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Sim_Out_GoodDischargeRun)MOV(20,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[[XIC(Sim_Out_ConveyorRun) ,XIC(Sim_In_ConveyorRunning) ]MOV(30,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIC(HMI_Cmd_Stop)MOV(40,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[NEQ(Sys_Sts_MachineState,0)MOV(50,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[[XIC(Sys_Sts_AutoMode) ,XIO(Sys_Sts_ManualMode) ]MOV(60,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[[XIC(Sys_Sts_BlockingFault) ,XIC(Reject_Flt_FailToExtend) ,XIC(Reject_Flt_FailToRetract) ]MOV(70,Reject_Sts_BlockReason);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Reject_Faults" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIC(Sys_Sts_ResetAllowed)OTE(Reject_ResetAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[ONS precedes permission: an invalid held request cannot reset later automatically.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(HMI_Cmd_Reset)ONS(RejectResetONS)[XIC(Reject_Flt_FailToExtend) ,XIC(Reject_Flt_FailToRetract) ]XIC(Sys_Sts_ResetAllowed)[OTU(Reject_Flt_FailToExtend) ,OTU(Reject_Flt_FailToRetract) ,OTE(Reject_Sts_ResetAccepted) ];]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(Sim_Out_RejectExtend)XIO(Sim_In_RejectExtended)TON(RejectExtendTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(RejectExtendTimeout.DN)OTL(Reject_Flt_FailToExtend);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIO(Sim_Out_RejectExtend)XIO(Sim_In_RejectRetracted)TON(RejectRetractTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIC(RejectRetractTimeout.DN)OTL(Reject_Flt_FailToRetract);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+<Program Name="Program_Production" TestEdits="false" MainRoutineName="MainRoutine" Disabled="false" UseAsFolder="false">
+<Description>
+<![CDATA[Production sequence coordination, bottle tracking, and production statistics.]]>
+</Description>
+<Tags>
+<Tag Name="ClearCellRequestONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="ClearCell_CommandsReleased" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="ClearCell_EquipmentReady" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Exit_ReadyForIndex" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Filling_ReadyForIndex" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="IndexConfirmTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,1000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="1000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="IndexTimeout" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,3000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="3000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="Index_CommandsReleased" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Index_EquipmentReady" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Inspection_ReadyForIndex" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="LoadRequestONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="ProductionResetONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_CycleHealthy" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Production_ResetAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Production_ResetCommandsReleased" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Production_SensorsClear" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Production_TrackingEmpty" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="SequenceAtScan" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[10]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="10"/>
+</Data>
+</Tag>
+<Tag Name="StatisticsResetAccepted" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="StatisticsResetONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Stats_ExitElapsed" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[2.10048682e+003]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="2100.4868"/>
+</Data>
+</Tag>
+<Tag Name="Stats_HasPreviousExit" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Stats_RateElapsed" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[5.49610672e+001]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="54.961067"/>
+</Data>
+</Tag>
+<Tag Name="Stats_WindowCount" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="TrackingMismatchDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,200,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="200"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+</Tags>
+<Routines>
+<Routine Name="Bottle_Loading" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIO(Production_Bottles[0].Occupied)XIO(Sim_In_EntryPE)OTE(Production_Sts_LoadAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(HMI_Cmd_LoadBottle)ONS(LoadRequestONS)XIC(Production_Sts_LoadAllowed)OTE(Production_Sts_LoadAccepted);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_LoadAccepted)[OTL(Production_Bottles[0].Occupied) ,OTU(Production_Bottles[0].FillComplete) ,OTU(Production_Bottles[0].InspectionComplete) ,OTU(Production_Bottles[0].RejectRequired) ];]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[MOV(10,Production_Sts_LoadBlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[[XIC(HMI_Cmd_Stop) ,XIC(HMI_Cmd_ClearCell) ]MOV(20,Production_Sts_LoadBlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[[XIC(Sim_Out_ConveyorRun) ,XIC(Sim_In_ConveyorRunning) ]MOV(30,Production_Sts_LoadBlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[[XIC(Production_Bottles[0].Occupied) ,XIC(Sim_In_EntryPE) ]MOV(40,Production_Sts_LoadBlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[[XIC(Sys_Sts_BlockingFault) ,XIO(Sys_Sts_StartupReady) ]MOV(50,Production_Sts_LoadBlockReason);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_LoadAllowed)MOV(0,Production_Sts_LoadBlockReason);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Bottle_Tracking" Type="ST">
+<STContent>
+<Line Number="0">
+<![CDATA[if Production_Sts_SequenceState <> 30 then]]>
+</Line>
+<Line Number="1">
+<![CDATA[	Production_Sts_IndexCommitted := 0;]]>
+</Line>
+<Line Number="2">
+<![CDATA[elsif Production_Sts_IndexPositionsMatch AND NOT Production_Sts_IndexCommitted then]]>
+</Line>
+<Line Number="3">
+<![CDATA[	]]>
+</Line>
+<Line Number="4">
+<![CDATA[	// Copy downstream first to preserve seach source record.]]>
+</Line>
+<Line Number="5">
+<![CDATA[	COP(Production_Bottles[2], Production_Bottles[3], 1);]]>
+</Line>
+<Line Number="6">
+<![CDATA[	COP(Production_Bottles[1], Production_Bottles[2], 1);]]>
+</Line>
+<Line Number="7">
+<![CDATA[	COP(Production_Bottles[0], Production_Bottles[1], 1);]]>
+</Line>
+<Line Number="8">
+<![CDATA[	]]>
+</Line>
+<Line Number="9">
+<![CDATA[ 	// Entry is empty after the confirmed movement.]]>
+</Line>
+<Line Number="10">
+<![CDATA[    Production_Bottles[0].Occupied := 0;]]>
+</Line>
+<Line Number="11">
+<![CDATA[    Production_Bottles[0].FillComplete := 0;]]>
+</Line>
+<Line Number="12">
+<![CDATA[    Production_Bottles[0].InspectionComplete := 0;]]>
+</Line>
+<Line Number="13">
+<![CDATA[    Production_Bottles[0].RejectRequired := 0;]]>
+</Line>
+<Line Number="14">
+<![CDATA[]]>
+</Line>
+<Line Number="15">
+<![CDATA[    Production_Sts_IndexCommitted := 1;]]>
+</Line>
+<Line Number="16">
+<![CDATA[end_if;]]>
+</Line>
+</STContent>
+</Routine>
+<Routine Name="Clear_Cell" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIO(Sim_Out_FillValveOpen)XIC(Sim_In_FillValveClosed)XIO(Sim_Out_RejectExtend)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)XIO(Sim_Out_GoodDischargeRun)OTE(ClearCell_EquipmentReady);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(HMI_Cmd_Start)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_LoadBottle)XIO(HMI_Cmd_ConveyorJog)XIO(HMI_Cmd_FillValveOpen)XIO(HMI_Cmd_RejectExtend)XIO(HMI_Cmd_Reset)OTE(ClearCell_CommandsReleased);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)[EQU(Sys_Sts_MachineState,0) ,EQU(Sys_Sts_MachineState,30) ]XIC(ClearCell_EquipmentReady)XIC(ClearCell_CommandsReleased)OTE(Production_Sts_ClearCellAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(HMI_Cmd_ClearCell)ONS(ClearCellRequestONS)XIC(Production_Sts_ClearCellAllowed)OTE(Production_Sts_ClearCellAccepted);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[Recovery loss counts tracked bottles removed; not normal reject production.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)XIC(Production_Bottles[0].Occupied)LES(Production_Stats_RecoveryLossCount,2147483647)ADD(Production_Stats_RecoveryLossCount,1,Production_Stats_RecoveryLossCount);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)[OTU(Production_Bottles[0].Occupied) ,OTU(Production_Bottles[0].FillComplete) ,OTU(Production_Bottles[0].InspectionComplete) ,OTU(Production_Bottles[0].RejectRequired) ];]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[Recovery loss counts tracked bottles removed; not normal reject production.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)XIC(Production_Bottles[1].Occupied)LES(Production_Stats_RecoveryLossCount,2147483647)ADD(Production_Stats_RecoveryLossCount,1,Production_Stats_RecoveryLossCount);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)[OTU(Production_Bottles[1].Occupied) ,OTU(Production_Bottles[1].FillComplete) ,OTU(Production_Bottles[1].InspectionComplete) ,OTU(Production_Bottles[1].RejectRequired) ];]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA[Recovery loss counts tracked bottles removed; not normal reject production.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)XIC(Production_Bottles[2].Occupied)LES(Production_Stats_RecoveryLossCount,2147483647)ADD(Production_Stats_RecoveryLossCount,1,Production_Stats_RecoveryLossCount);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)[OTU(Production_Bottles[2].Occupied) ,OTU(Production_Bottles[2].FillComplete) ,OTU(Production_Bottles[2].InspectionComplete) ,OTU(Production_Bottles[2].RejectRequired) ];]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment>
+<![CDATA[Recovery loss counts tracked bottles removed; not normal reject production.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)XIC(Production_Bottles[3].Occupied)LES(Production_Stats_RecoveryLossCount,2147483647)ADD(Production_Stats_RecoveryLossCount,1,Production_Stats_RecoveryLossCount);]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)[OTU(Production_Bottles[3].Occupied) ,OTU(Production_Bottles[3].FillComplete) ,OTU(Production_Bottles[3].InspectionComplete) ,OTU(Production_Bottles[3].RejectRequired) ];]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)MOV(0,Production_Sts_SequenceState);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Index_Confirmation" Type="ST">
+<STContent>
+<Line Number="0">
+<![CDATA[Production_Sts_IndexPositionsMatch :=]]>
+</Line>
+<Line Number="1">
+<![CDATA[    (Production_Sts_SequenceState = 30)]]>
+</Line>
+<Line Number="2">
+<![CDATA[    AND (]]>
+</Line>
+<Line Number="3">
+<![CDATA[        (Sys_Sts_MachineState = 10)]]>
+</Line>
+<Line Number="4">
+<![CDATA[        OR (Sys_Sts_MachineState = 20)]]>
+</Line>
+<Line Number="5">
+<![CDATA[    )]]>
+</Line>
+<Line Number="6">
+<![CDATA[    AND Sys_Sts_AutoMode]]>
+</Line>
+<Line Number="7">
+<![CDATA[    AND NOT Sys_Sts_ManualMode]]>
+</Line>
+<Line Number="8">
+<![CDATA[    AND NOT Sys_Sts_BlockingFault]]>
+</Line>
+<Line Number="9">
+<![CDATA[    AND NOT Sim_Out_ConveyorRun]]>
+</Line>
+<Line Number="10">
+<![CDATA[    AND NOT Sim_In_ConveyorRunning]]>
+</Line>
+<Line Number="11">
+<![CDATA[    AND NOT Production_Bottles[3].Occupied]]>
+</Line>
+<Line Number="12">
+<![CDATA[    AND NOT Sim_In_EntryPE]]>
+</Line>
+<Line Number="13">
+<![CDATA[    AND NOT (Sim_In_FillPE XOR Production_Bottles[0].Occupied)]]>
+</Line>
+<Line Number="14">
+<![CDATA[    AND NOT (Sim_In_InspectionPE XOR Production_Bottles[1].Occupied)]]>
+</Line>
+<Line Number="15">
+<![CDATA[    AND NOT (Sim_In_ExitPE XOR Production_Bottles[2].Occupied);]]>
+</Line>
+</STContent>
+</Routine>
+<Routine Name="Index_Permissives" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIO(Sim_Out_FillValveOpen)XIC(Sim_In_FillValveClosed)XIO(Sim_Out_RejectExtend)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)XIO(Sim_Out_GoodDischargeRun)OTE(Index_EquipmentReady);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)XIO(HMI_Cmd_Reset)XIO(HMI_Cmd_ConveyorJog)XIO(HMI_Cmd_FillValveOpen)XIO(HMI_Cmd_RejectExtend)OTE(Index_CommandsReleased);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)EQU(Production_Sts_SequenceState,10)XIC(Production_Sts_StationsReady)XIC(Production_Sts_IndexDemand)XIC(Index_EquipmentReady)XIC(Index_CommandsReleased)XIO(Production_Sts_LoadAccepted)OTE(Production_Sts_IndexAllowed);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Index_Readiness" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[[XIO(Production_Bottles[1].Occupied) ,XIC(Production_Bottles[1].FillComplete) ]NEQ(Filling_Sts_State,20)NEQ(Filling_Sts_State,30)OTE(Filling_ReadyForIndex);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[[XIO(Production_Bottles[2].Occupied) ,XIC(Production_Bottles[2].InspectionComplete) ]NEQ(Inspection_Sts_State,20)OTE(Inspection_ReadyForIndex);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(Production_Bottles[3].Occupied)[EQU(Exit_Sts_State,0) ,EQU(Exit_Sts_State,60) ]OTE(Exit_ReadyForIndex);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Filling_ReadyForIndex)XIC(Inspection_ReadyForIndex)XIC(Exit_ReadyForIndex)OTE(Production_Sts_StationsReady);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[[XIC(Production_Bottles[0].Occupied) ,XIC(Production_Bottles[1].Occupied) ,XIC(Production_Bottles[2].Occupied) ]OTE(Production_Sts_IndexDemand);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="MainRoutine" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Clear_Cell,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Statistics_Reset,0);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Production_Statistics,0);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Bottle_Loading,0);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Index_Readiness,0);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Index_Permissives,0);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Index_Confirmation,0);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Bottle_Tracking,0);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Production_Faults,0);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Production_Sequence,0);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Production_Faults" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(Production_Bottles[0].Occupied)XIO(Production_Bottles[1].Occupied)XIO(Production_Bottles[2].Occupied)XIO(Production_Bottles[3].Occupied)OTE(Production_TrackingEmpty);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(Sim_In_EntryPE)XIO(Sim_In_FillPE)XIO(Sim_In_InspectionPE)XIO(Sim_In_ExitPE)XIO(Sim_In_GoodExitPE)XIO(Sim_In_RejectExitPE)OTE(Production_SensorsClear);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(HMI_Cmd_Start)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_LoadBottle)XIO(HMI_Cmd_ClearCell)XIO(HMI_Cmd_ConveyorJog)XIO(HMI_Cmd_FillValveOpen)XIO(HMI_Cmd_RejectExtend)OTE(Production_ResetCommandsReleased);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Sys_Sts_ResetAllowed)OTE(Production_ResetAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[ONS precedes permission: an invalid held request cannot reset later automatically.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(HMI_Cmd_Reset)ONS(ProductionResetONS)[XIC(Production_Flt_IndexTimeout) ,XIC(Production_Flt_IndexConfirmTimeout) ,XIC(Production_Flt_StartupRecoveryRequired) ,XIC(Production_Flt_TrackingMismatch) ,XIC(Production_Flt_InvalidState) ,XIC(Production_Flt_IndexInterlock) ,XIC(Production_Flt_InvalidConfiguration) ]XIC(Sys_Sts_ResetAllowed)[OTU(Production_Flt_IndexTimeout) ,OTU(Production_Flt_IndexConfirmTimeout) ,OTU(Production_Flt_StartupRecoveryRequired) ,OTU(Production_Flt_TrackingMismatch) ,OTU(Production_Flt_InvalidState) ,OTU(Production_Flt_IndexInterlock) ,OTU(Production_Flt_InvalidConfiguration) ,OTE(Production_Sts_ResetAccepted) ];]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)EQU(Production_Sts_SequenceState,20)XIO(Sim_In_IndexComplete)TON(IndexTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[XIC(IndexTimeout.DN)OTL(Production_Flt_IndexTimeout);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)EQU(Production_Sts_SequenceState,30)XIO(Production_Sts_IndexCommitted)TON(IndexConfirmTimeout,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[XIC(IndexConfirmTimeout.DN)OTL(Production_Flt_IndexConfirmTimeout);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment>
+<![CDATA[Debounce the normal one-pass load/departure update before declaring mismatch.]]>
+</Comment>
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)EQU(Production_Sts_SequenceState,10)XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)[[XIC(Production_Bottles[0].Occupied) XIO(Sim_In_EntryPE) ,XIO(Production_Bottles[0].Occupied) XIC(Sim_In_EntryPE) ] ,[XIC(Production_Bottles[1].Occupied) XIO(Sim_In_FillPE) ,XIO(Production_Bottles[1].Occupied) XIC(Sim_In_FillPE) ] ,[XIC(Production_Bottles[2].Occupied) XIO(Sim_In_InspectionPE) ,XIO(Production_Bottles[2].Occupied) XIC(Sim_In_InspectionPE) ] ,[XIC(Production_Bottles[3].Occupied) XIO(Sim_In_ExitPE) ,XIO(Production_Bottles[3].Occupied) XIC(Sim_In_ExitPE) ] ,XIC(Production_Bottles[2].Occupied) XIO(Production_Bottles[2].FillComplete) ,XIC(Production_Bottles[3].Occupied) XIO(Production_Bottles[3].InspectionComplete) ]TON(TrackingMismatchDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Text>
+<![CDATA[XIC(TrackingMismatchDelay.DN)OTL(Production_Flt_TrackingMismatch);]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Text>
+<![CDATA[XIC(Sys_Sts_StartupReady)[NEQ(Sys_Sts_MachineState,0) NEQ(Sys_Sts_MachineState,10) NEQ(Sys_Sts_MachineState,20) NEQ(Sys_Sts_MachineState,30) ,NEQ(Production_Sts_SequenceState,0) NEQ(Production_Sts_SequenceState,10) NEQ(Production_Sts_SequenceState,20) NEQ(Production_Sts_SequenceState,30) ,NEQ(Filling_Sts_State,0) NEQ(Filling_Sts_State,10) NEQ(Filling_Sts_State,20) NEQ(Filling_Sts_State,30) NEQ(Filling_Sts_State,40) NEQ(Filling_Sts_State,90) ,NEQ(Inspection_Sts_State,0) NEQ(Inspection_Sts_State,10) NEQ(Inspection_Sts_State,20) NEQ(Inspection_Sts_State,40) NEQ(Inspection_Sts_State,90) ,NEQ(Exit_Sts_State,0) NEQ(Exit_Sts_State,10) NEQ(Exit_Sts_State,20) NEQ(Exit_Sts_State,30) NEQ(Exit_Sts_State,40) NEQ(Exit_Sts_State,50) NEQ(Exit_Sts_State,60) NEQ(Exit_Sts_State,90) ,XIC(Sys_Sts_AutoMode) XIC(Sys_Sts_ManualMode) ,[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ] XIO(Sys_Sts_AutoMode) ,EQU(Sys_Sts_MachineState,0) [EQU(Production_Sts_SequenceState,20) ,EQU(Production_Sts_SequenceState,30) ] ]OTL(Production_Flt_InvalidState);]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(Production_Sts_SequenceState,20)[XIO(Sim_In_FillValveClosed) ,XIC(Sim_Out_FillValveOpen) ,XIO(Sim_In_RejectRetracted) ,XIC(Sim_In_RejectExtended) ,XIC(Sim_Out_RejectExtend) ,XIC(Sim_Out_GoodDischargeRun) ]OTL(Production_Flt_IndexInterlock);]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Text>
+<![CDATA[XIO(Conveyor_Flt_FailToStart)XIO(Filling_Flt_ValveFailToClose)XIO(Filling_Flt_FillTimeout)XIO(Inspection_Flt_Timeout)XIO(Reject_Flt_FailToExtend)XIO(Reject_Flt_FailToRetract)XIO(Exit_Flt_DischargeTimeout)XIO(Production_Flt_IndexTimeout)XIO(Production_Flt_IndexConfirmTimeout)XIO(Production_Flt_StartupRecoveryRequired)XIO(Production_Flt_TrackingMismatch)XIO(Production_Flt_InvalidState)XIO(Production_Flt_IndexInterlock)XIO(Production_Flt_InvalidConfiguration)OTE(Production_CycleHealthy);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Production_Sequence" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[MOV(Production_Sts_SequenceState,SequenceAtScan);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Snapshot prevents multiple phase transitions in one execution.]]>
+</Comment>
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)XIC(Production_CycleHealthy)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(SequenceAtScan,0)EQU(Sys_Sts_MachineState,10)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_ClearCell)MOV(10,Production_Sts_SequenceState);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)XIC(Production_CycleHealthy)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(SequenceAtScan,10)XIC(Production_Sts_IndexAllowed)MOV(20,Production_Sts_SequenceState);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)XIC(Production_CycleHealthy)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(SequenceAtScan,20)XIC(Sim_In_IndexComplete)MOV(30,Production_Sts_SequenceState);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)XIC(Production_CycleHealthy)[EQU(Sys_Sts_MachineState,10) ,EQU(Sys_Sts_MachineState,20) ]EQU(SequenceAtScan,30)XIC(Production_Sts_IndexCommitted)MOV(10,Production_Sts_SequenceState);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Production_Statistics" Type="ST">
+<STContent>
+<Line Number="0">
+<![CDATA[// One event per confirmed departure. Recovery clear losses are counted separately.]]>
+</Line>
+<Line Number="1">
+<![CDATA[IF Exit_Sts_GoodCompletePulse OR Exit_Sts_RejectCompletePulse THEN]]>
+</Line>
+<Line Number="2">
+<![CDATA[    IF Production_Stats_TotalCount < 2147483647 THEN]]>
+</Line>
+<Line Number="3">
+<![CDATA[        Production_Stats_TotalCount := Production_Stats_TotalCount + 1;]]>
+</Line>
+<Line Number="4">
+<![CDATA[        IF Exit_Sts_GoodCompletePulse THEN]]>
+</Line>
+<Line Number="5">
+<![CDATA[            Production_Stats_GoodCount := Production_Stats_GoodCount + 1;]]>
+</Line>
+<Line Number="6">
+<![CDATA[        ELSE]]>
+</Line>
+<Line Number="7">
+<![CDATA[            Production_Stats_RejectCount := Production_Stats_RejectCount + 1;]]>
+</Line>
+<Line Number="8">
+<![CDATA[        END_IF;]]>
+</Line>
+<Line Number="9">
+<![CDATA[    ELSE]]>
+</Line>
+<Line Number="10">
+<![CDATA[        Production_Sts_CounterSaturated := 1;]]>
+</Line>
+<Line Number="11">
+<![CDATA[    END_IF;]]>
+</Line>
+<Line Number="12">
+<![CDATA[    IF Stats_HasPreviousExit THEN]]>
+</Line>
+<Line Number="13">
+<![CDATA[        Production_Stats_LastCycleSeconds := Stats_ExitElapsed;]]>
+</Line>
+<Line Number="14">
+<![CDATA[    END_IF;]]>
+</Line>
+<Line Number="15">
+<![CDATA[    Stats_HasPreviousExit := 1;]]>
+</Line>
+<Line Number="16">
+<![CDATA[    Stats_ExitElapsed := 0.0;]]>
+</Line>
+<Line Number="17">
+<![CDATA[    Stats_WindowCount := Stats_WindowCount + 1;]]>
+</Line>
+<Line Number="18">
+<![CDATA[    Production_Bottles[3].Occupied := 0;]]>
+</Line>
+<Line Number="19">
+<![CDATA[    Production_Bottles[3].FillComplete := 0;]]>
+</Line>
+<Line Number="20">
+<![CDATA[    Production_Bottles[3].InspectionComplete := 0;]]>
+</Line>
+<Line Number="21">
+<![CDATA[    Production_Bottles[3].RejectRequired := 0;]]>
+</Line>
+<Line Number="22">
+<![CDATA[END_IF;]]>
+</Line>
+<Line Number="23">
+<![CDATA[IF (Sys_Sts_MachineState = 10) OR (Sys_Sts_MachineState = 20) THEN]]>
+</Line>
+<Line Number="24">
+<![CDATA[    Production_Stats_RunSeconds := Production_Stats_RunSeconds + 0.02;]]>
+</Line>
+<Line Number="25">
+<![CDATA[    Stats_ExitElapsed := Stats_ExitElapsed + 0.02;]]>
+</Line>
+<Line Number="26">
+<![CDATA[ELSIF Sys_Sts_MachineState = 30 THEN]]>
+</Line>
+<Line Number="27">
+<![CDATA[    Production_Stats_FaultSeconds := Production_Stats_FaultSeconds + 0.02;]]>
+</Line>
+<Line Number="28">
+<![CDATA[ELSE]]>
+</Line>
+<Line Number="29">
+<![CDATA[    Production_Stats_StoppedSeconds := Production_Stats_StoppedSeconds + 0.02;]]>
+</Line>
+<Line Number="30">
+<![CDATA[END_IF;]]>
+</Line>
+<Line Number="31">
+<![CDATA[Stats_RateElapsed := Stats_RateElapsed + 0.02;]]>
+</Line>
+<Line Number="32">
+<![CDATA[IF Stats_RateElapsed >= 60.0 THEN]]>
+</Line>
+<Line Number="33">
+<![CDATA[    Production_Stats_RatePerMinute := Stats_WindowCount * 60.0 / Stats_RateElapsed;]]>
+</Line>
+<Line Number="34">
+<![CDATA[    Stats_RateElapsed := 0.0;]]>
+</Line>
+<Line Number="35">
+<![CDATA[    Stats_WindowCount := 0;]]>
+</Line>
+<Line Number="36">
+<![CDATA[END_IF;]]>
+</Line>
+<Line Number="37">
+<![CDATA[IF S:FS THEN]]>
+</Line>
+<Line Number="38">
+<![CDATA[    Stats_ExitElapsed := 0.0;]]>
+</Line>
+<Line Number="39">
+<![CDATA[    Stats_HasPreviousExit := 0;]]>
+</Line>
+<Line Number="40">
+<![CDATA[    Stats_RateElapsed := 0.0;]]>
+</Line>
+<Line Number="41">
+<![CDATA[    Stats_WindowCount := 0;]]>
+</Line>
+<Line Number="42">
+<![CDATA[    Production_Stats_RatePerMinute := 0.0;]]>
+</Line>
+<Line Number="43">
+<![CDATA[END_IF;]]>
+</Line>
+<Line Number="44">
+<![CDATA[IF StatisticsResetAccepted THEN]]>
+</Line>
+<Line Number="45">
+<![CDATA[    Production_Stats_TotalCount := 0;]]>
+</Line>
+<Line Number="46">
+<![CDATA[    Production_Stats_GoodCount := 0;]]>
+</Line>
+<Line Number="47">
+<![CDATA[    Production_Stats_RejectCount := 0;]]>
+</Line>
+<Line Number="48">
+<![CDATA[    Production_Stats_RecoveryLossCount := 0;]]>
+</Line>
+<Line Number="49">
+<![CDATA[    Production_Stats_RunSeconds := 0.0;]]>
+</Line>
+<Line Number="50">
+<![CDATA[    Production_Stats_StoppedSeconds := 0.0;]]>
+</Line>
+<Line Number="51">
+<![CDATA[    Production_Stats_FaultSeconds := 0.0;]]>
+</Line>
+<Line Number="52">
+<![CDATA[    Production_Stats_LastCycleSeconds := 0.0;]]>
+</Line>
+<Line Number="53">
+<![CDATA[    Production_Stats_RatePerMinute := 0.0;]]>
+</Line>
+<Line Number="54">
+<![CDATA[    Production_Sts_CounterSaturated := 0;]]>
+</Line>
+<Line Number="55">
+<![CDATA[    Stats_ExitElapsed := 0.0;]]>
+</Line>
+<Line Number="56">
+<![CDATA[    Stats_HasPreviousExit := 0;]]>
+</Line>
+<Line Number="57">
+<![CDATA[    Stats_RateElapsed := 0.0;]]>
+</Line>
+<Line Number="58">
+<![CDATA[    Stats_WindowCount := 0;]]>
+</Line>
+<Line Number="59">
+<![CDATA[END_IF;]]>
+</Line>
+</STContent>
+</Routine>
+<Routine Name="Statistics_Reset" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIC(HMI_Cmd_ResetStatistics)ONS(StatisticsResetONS)EQU(Sys_Sts_MachineState,0)XIC(Sys_Sts_CellEmpty)XIC(Sys_Sts_EquipmentHome)XIO(HMI_Cmd_Start)OTE(StatisticsResetAccepted);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+<Program Name="Program_Simulation" TestEdits="false" MainRoutineName="Main_Routine" Disabled="false" UseAsFolder="false">
+<Tags>
+<Tag Name="ConveyorStartDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,200,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="200"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="FillProcessDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,1500,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="1500"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="FillValveCloseDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[-1607726867,150,160]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="150"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="160"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="1"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="1"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="GoodDischargeDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,700,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="700"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="GoodTransferONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="GoodTransferPulse" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="IndexTransferONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="IndexTransferPulse" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="IndexTravelDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,1000,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="1000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="RejectDischargeDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,500,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="RejectExtendDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[0,200,0]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="200"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="RejectRetractDelay" TagType="Base" DataType="TIMER" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Non-retentive timer; preset in milliseconds.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[[-1608127965,200,200]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="200"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="200"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="1"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="1"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="RejectTransferONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="RejectTransferPulse" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_EntryOccupied" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Description>
+<![CDATA[Simulated physical bottle presence at Entry.]]>
+</Description>
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_ExitOccupied" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_FillOccupied" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Sim_InspectionOccupied" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+</Tags>
+<Routines>
+<Routine Name="Bottle_Simulation" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_LoadAccepted)OTL(Sim_EntryOccupied);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(Production_Sts_ClearCellAccepted)[OTU(Sim_EntryOccupied) ,OTU(Sim_FillOccupied) ,OTU(Sim_InspectionOccupied) ,OTU(Sim_ExitOccupied) ];]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[Physical simulation diagnostic remains true even when a photoeye is deliberately suppressed.]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(Sim_EntryOccupied) ,XIC(Sim_FillOccupied) ,XIC(Sim_InspectionOccupied) ,XIC(Sim_ExitOccupied) ]OTE(Sim_Sts_BottlesPresent);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Sim_EntryOccupied)OTE(Sim_In_EntryPE);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIC(Sim_FillOccupied)XIO(HMI_Sim_BottleMissingAtFill)OTE(Sim_In_FillPE);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIC(Sim_InspectionOccupied)OTE(Sim_In_InspectionPE);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[XIC(Sim_ExitOccupied)OTE(Sim_In_ExitPE);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Conveyor_Simulation" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIC(Sim_Out_ConveyorRun)XIO(HMI_Sim_ConveyorFailToStart)TON(ConveyorStartDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(Sim_Out_ConveyorRun)XIO(HMI_Sim_ConveyorFailToStart)XIC(ConveyorStartDelay.DN)OTE(Sim_In_ConveyorRunning);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Exit_Simulation" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[[XIO(Sim_Out_GoodDischargeRun) ,XIC(Production_Sts_ClearCellAccepted) ,XIC(S:FS) ]OTU(Sim_In_GoodExitPE);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[[XIO(Sim_Out_RejectExtend) ,XIC(Production_Sts_ClearCellAccepted) ,XIC(S:FS) ]OTU(Sim_In_RejectExitPE);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sim_Out_GoodDischargeRun)XIC(Sim_ExitOccupied)XIO(HMI_Sim_GoodDischargeJam)TON(GoodDischargeDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sim_Out_RejectExtend)XIC(Sim_In_RejectExtended)EQU(Exit_Sts_State,40)XIC(Sim_ExitOccupied)XIO(HMI_Sim_RejectDischargeJam)TON(RejectDischargeDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIC(GoodDischargeDelay.DN)ONS(GoodTransferONS)OTE(GoodTransferPulse);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIC(RejectDischargeDelay.DN)ONS(RejectTransferONS)OTE(RejectTransferPulse);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[XIC(GoodTransferPulse)[OTU(Sim_ExitOccupied) ,OTL(Sim_In_GoodExitPE) ];]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[XIC(RejectTransferPulse)[OTU(Sim_ExitOccupied) ,OTL(Sim_In_RejectExitPE) ];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Filling_Simulation" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(Sim_Out_FillValveOpen)XIO(HMI_Sim_FillValveFailToClose)TON(FillValveCloseDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(FillValveCloseDelay.DN)OTE(Sim_In_FillValveClosed);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[GEQ(Filling_Sts_ActiveFillTimeMs,100)LEQ(Filling_Sts_ActiveFillTimeMs,3000)MOV(Filling_Sts_ActiveFillTimeMs,FillProcessDelay.PRE);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Sim_Out_FillValveOpen)XIC(Sim_FillOccupied)XIO(HMI_Sim_FillFailToComplete)TON(FillProcessDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIC(FillProcessDelay.DN)OTE(Sim_In_FillComplete);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Index_Simulation" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[[NEQ(Production_Sts_SequenceState,20) ,XIC(S:FS) ,XIC(Production_Sts_ClearCellAccepted) ]OTU(Sim_In_IndexComplete);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)EQU(Production_Sts_SequenceState,20)XIO(Production_Sts_ClearCellAccepted)XIC(Sim_Out_ConveyorRun)XIC(Sim_In_ConveyorRunning)XIO(Sim_In_IndexComplete)XIO(HMI_Sim_IndexJam)TON(IndexTravelDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(IndexTravelDelay.DN)ONS(IndexTransferONS)OTE(IndexTransferPulse);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(IndexTransferPulse)[XIC(Sim_InspectionOccupied) OTL(Sim_ExitOccupied) ,XIO(Sim_InspectionOccupied) OTU(Sim_ExitOccupied) ];]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIC(IndexTransferPulse)[XIC(Sim_FillOccupied) OTL(Sim_InspectionOccupied) ,XIO(Sim_FillOccupied) OTU(Sim_InspectionOccupied) ];]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIC(IndexTransferPulse)XIO(HMI_Sim_IndexPositionMismatch)[XIC(Sim_EntryOccupied) OTL(Sim_FillOccupied) ,XIO(Sim_EntryOccupied) OTU(Sim_FillOccupied) ];]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[Deliberately wrong physical Fill occupancy for the position-confirmation fault test.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(IndexTransferPulse)XIC(HMI_Sim_IndexPositionMismatch)[XIC(Sim_EntryOccupied) OTU(Sim_FillOccupied) ,XIO(Sim_EntryOccupied) OTL(Sim_FillOccupied) ];]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[XIC(IndexTransferPulse)[OTL(Sim_In_IndexComplete) ,OTU(Sim_EntryOccupied) ];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Main_Routine" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Conveyor_Simulation,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Filling_Simulation,0);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Reject_Simulation,0);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Index_Simulation,0);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Exit_Simulation,0);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Bottle_Simulation,0);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Reject_Simulation" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIC(Sim_Out_RejectExtend)XIO(HMI_Sim_RejectFailToExtend)TON(RejectExtendDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(Sim_Out_RejectExtend)XIO(HMI_Sim_RejectFailToRetract)TON(RejectRetractDelay,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(RejectExtendDelay.DN)OTE(Sim_In_RejectExtended);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(RejectRetractDelay.DN)OTE(Sim_In_RejectRetracted);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+<Program Name="Program_System" TestEdits="false" MainRoutineName="MainRoutine" Disabled="false" UseAsFolder="false">
+<Description>
+<![CDATA[Machine mode, startup, controlled stop, and overall fault coordination.]]>
+</Description>
+<Tags>
+<Tag Name="AlarmAckONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge101" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge201" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge202" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge301" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge401" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge402" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge403" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge501" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge502" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge503" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge504" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge505" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge506" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AlarmEdge507" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="AutoRequestONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="ConfigurationValid" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="ManualRequestONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="ModeChangeAllowed" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read Only">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Recovery_CommandsReleased" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Recovery_PhaseClear" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Recovery_SensorsClear" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Recovery_TrackingClear" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="StartRequestONS" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Startup_CheckPending" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[0]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</Data>
+</Tag>
+<Tag Name="Start_CommandsReleased" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+<Tag Name="Start_EquipmentReady" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="None">
+<Data Format="L5K">
+<![CDATA[1]]>
+</Data>
+<Data Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="1"/>
+</Data>
+</Tag>
+</Tags>
+<Routines>
+<Routine Name="Alarm_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIC(HMI_Cmd_Acknowledge)ONS(AlarmAckONS)OTU(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[MOV(0,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[MOV(0,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_InvalidConfiguration)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_InvalidConfiguration)MOV(507,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_InvalidConfiguration)ONS(AlarmEdge507)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexInterlock)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexInterlock)MOV(506,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexInterlock)ONS(AlarmEdge506)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_InvalidState)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_InvalidState)MOV(505,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_InvalidState)ONS(AlarmEdge505)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_TrackingMismatch)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_TrackingMismatch)MOV(504,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="14" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_TrackingMismatch)ONS(AlarmEdge504)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="15" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_StartupRecoveryRequired)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="16" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_StartupRecoveryRequired)MOV(503,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="17" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_StartupRecoveryRequired)ONS(AlarmEdge503)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="18" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexConfirmTimeout)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="19" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexConfirmTimeout)MOV(502,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="20" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexConfirmTimeout)ONS(AlarmEdge502)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="21" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexTimeout)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="22" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexTimeout)MOV(501,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="23" Type="N">
+<Text>
+<![CDATA[XIC(Production_Flt_IndexTimeout)ONS(AlarmEdge501)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="24" Type="N">
+<Text>
+<![CDATA[XIC(Exit_Flt_DischargeTimeout)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="25" Type="N">
+<Text>
+<![CDATA[XIC(Exit_Flt_DischargeTimeout)MOV(403,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="26" Type="N">
+<Text>
+<![CDATA[XIC(Exit_Flt_DischargeTimeout)ONS(AlarmEdge403)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="27" Type="N">
+<Text>
+<![CDATA[XIC(Reject_Flt_FailToRetract)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="28" Type="N">
+<Text>
+<![CDATA[XIC(Reject_Flt_FailToRetract)MOV(402,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="29" Type="N">
+<Text>
+<![CDATA[XIC(Reject_Flt_FailToRetract)ONS(AlarmEdge402)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="30" Type="N">
+<Text>
+<![CDATA[XIC(Reject_Flt_FailToExtend)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="31" Type="N">
+<Text>
+<![CDATA[XIC(Reject_Flt_FailToExtend)MOV(401,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="32" Type="N">
+<Text>
+<![CDATA[XIC(Reject_Flt_FailToExtend)ONS(AlarmEdge401)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="33" Type="N">
+<Text>
+<![CDATA[XIC(Inspection_Flt_Timeout)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="34" Type="N">
+<Text>
+<![CDATA[XIC(Inspection_Flt_Timeout)MOV(301,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="35" Type="N">
+<Text>
+<![CDATA[XIC(Inspection_Flt_Timeout)ONS(AlarmEdge301)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="36" Type="N">
+<Text>
+<![CDATA[XIC(Filling_Flt_FillTimeout)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="37" Type="N">
+<Text>
+<![CDATA[XIC(Filling_Flt_FillTimeout)MOV(202,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="38" Type="N">
+<Text>
+<![CDATA[XIC(Filling_Flt_FillTimeout)ONS(AlarmEdge202)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="39" Type="N">
+<Text>
+<![CDATA[XIC(Filling_Flt_ValveFailToClose)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="40" Type="N">
+<Text>
+<![CDATA[XIC(Filling_Flt_ValveFailToClose)MOV(201,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="41" Type="N">
+<Text>
+<![CDATA[XIC(Filling_Flt_ValveFailToClose)ONS(AlarmEdge201)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+<Rung Number="42" Type="N">
+<Text>
+<![CDATA[XIC(Conveyor_Flt_FailToStart)ADD(Sys_Sts_ActiveAlarmCount,1,Sys_Sts_ActiveAlarmCount);]]>
+</Text>
+</Rung>
+<Rung Number="43" Type="N">
+<Text>
+<![CDATA[XIC(Conveyor_Flt_FailToStart)MOV(101,Sys_Sts_FirstFaultCode);]]>
+</Text>
+</Rung>
+<Rung Number="44" Type="N">
+<Text>
+<![CDATA[XIC(Conveyor_Flt_FailToStart)ONS(AlarmEdge101)OTL(Sys_Sts_AlarmUnacknowledged);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Configuration_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[Validate before equipment can sample configuration into timer presets.]]>
+</Comment>
+<Text>
+<![CDATA[GEQ(Cfg_FillTimeMs,100)LEQ(Cfg_FillTimeMs,3000)GEQ(Cfg_InspectionTimeMs,100)LEQ(Cfg_InspectionTimeMs,2000)OTE(ConfigurationValid);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIC(Sys_Sts_StartupReady)XIO(ConfigurationValid)OTL(Production_Flt_InvalidConfiguration);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Fault_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[[XIC(Conveyor_Flt_FailToStart) ,XIC(Filling_Flt_ValveFailToClose) ,XIC(Filling_Flt_FillTimeout) ,XIC(Inspection_Flt_Timeout) ,XIC(Reject_Flt_FailToExtend) ,XIC(Reject_Flt_FailToRetract) ,XIC(Exit_Flt_DischargeTimeout) ,XIC(Production_Flt_IndexTimeout) ,XIC(Production_Flt_IndexConfirmTimeout) ,XIC(Production_Flt_StartupRecoveryRequired) ,XIC(Production_Flt_TrackingMismatch) ,XIC(Production_Flt_InvalidState) ,XIC(Production_Flt_IndexInterlock) ,XIC(Production_Flt_InvalidConfiguration) ]OTE(Sys_Sts_BlockingFault);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Machine_State" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIC(Sys_Sts_BlockingFault)MOV(30,Sys_Sts_MachineState);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[EQU(Sys_Sts_MachineState,30)XIO(Sys_Sts_BlockingFault)[XIC(Conveyor_Sts_ResetAccepted) ,XIC(Filling_Sts_ResetAccepted) ,XIC(Reject_Sts_ResetAccepted) ,XIC(Inspection_Sts_ResetAccepted) ,XIC(Exit_Sts_ResetAccepted) ,XIC(Production_Sts_ResetAccepted) ]MOV(0,Sys_Sts_MachineState);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[Stop waits for active stations and the current index/confirmation; waiting bottles remain.]]>
+</Comment>
+<Text>
+<![CDATA[EQU(Sys_Sts_MachineState,20)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_EquipmentHome)XIC(Sys_Sts_OperationsIdle)[EQU(Production_Sts_SequenceState,0) ,EQU(Production_Sts_SequenceState,10) ]MOV(0,Sys_Sts_MachineState);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[EQU(Sys_Sts_MachineState,10)XIC(HMI_Cmd_Stop)XIO(Sys_Sts_BlockingFault)MOV(20,Sys_Sts_MachineState);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIC(HMI_Cmd_Start)ONS(StartRequestONS)XIC(Sys_Sts_StartAllowed)XIO(Sys_Sts_BlockingFault)EQU(Sys_Sts_MachineState,0)MOV(10,Sys_Sts_MachineState);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="MainRoutine" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Startup_Control,0);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Configuration_Control,0);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Recovery_Permissives,0);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Fault_Control,0);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Mode_Control,0);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Start_Permissives,0);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Machine_State,0);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[Always execute; order is part of the scan contract.]]>
+</Comment>
+<Text>
+<![CDATA[JSR(Alarm_Control,0);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Mode_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIC(S:FS)[OTU(Sys_Sts_AutoMode) ,OTU(Sys_Sts_ManualMode) ];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)EQU(Sys_Sts_MachineState,0)XIO(Sys_Sts_BlockingFault)XIC(Sys_Sts_EquipmentHome)XIO(HMI_Cmd_Start)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_LoadBottle)XIO(HMI_Cmd_ClearCell)XIO(HMI_Cmd_ConveyorJog)XIO(HMI_Cmd_FillValveOpen)XIO(HMI_Cmd_RejectExtend)XIO(HMI_Cmd_Reset)OTE(ModeChangeAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(HMI_Cmd_SelectManual)ONS(ManualRequestONS)XIO(HMI_Cmd_SelectAuto)XIC(ModeChangeAllowed)[OTU(Sys_Sts_AutoMode) ,OTL(Sys_Sts_ManualMode) ];]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(HMI_Cmd_SelectAuto)ONS(AutoRequestONS)XIO(HMI_Cmd_SelectManual)XIC(ModeChangeAllowed)[OTL(Sys_Sts_AutoMode) ,OTU(Sys_Sts_ManualMode) ];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Recovery_Permissives" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIO(Sim_Out_FillValveOpen)XIC(Sim_In_FillValveClosed)XIO(Sim_Out_RejectExtend)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)XIO(Sim_Out_GoodDischargeRun)OTE(Sys_Sts_EquipmentHome);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(Production_Bottles[0].Occupied)XIO(Production_Bottles[0].FillComplete)XIO(Production_Bottles[0].InspectionComplete)XIO(Production_Bottles[0].RejectRequired)XIO(Production_Bottles[1].Occupied)XIO(Production_Bottles[1].FillComplete)XIO(Production_Bottles[1].InspectionComplete)XIO(Production_Bottles[1].RejectRequired)XIO(Production_Bottles[2].Occupied)XIO(Production_Bottles[2].FillComplete)XIO(Production_Bottles[2].InspectionComplete)XIO(Production_Bottles[2].RejectRequired)XIO(Production_Bottles[3].Occupied)XIO(Production_Bottles[3].FillComplete)XIO(Production_Bottles[3].InspectionComplete)XIO(Production_Bottles[3].RejectRequired)OTE(Recovery_TrackingClear);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(Sim_In_EntryPE)XIO(Sim_In_FillPE)XIO(Sim_In_InspectionPE)XIO(Sim_In_ExitPE)XIO(Sim_In_GoodExitPE)XIO(Sim_In_RejectExitPE)XIO(Sim_Sts_BottlesPresent)OTE(Recovery_SensorsClear);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Recovery_TrackingClear)XIC(Recovery_SensorsClear)OTE(Sys_Sts_CellEmpty);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text>
+<![CDATA[XIO(HMI_Sim_ConveyorFailToStart)XIO(HMI_Sim_FillValveFailToClose)XIO(HMI_Sim_RejectFailToExtend)XIO(HMI_Sim_RejectFailToRetract)XIO(HMI_Sim_IndexJam)XIO(HMI_Sim_IndexPositionMismatch)XIO(HMI_Sim_FillFailToComplete)XIO(HMI_Sim_InspectionFailToComplete)XIO(HMI_Sim_GoodDischargeJam)XIO(HMI_Sim_RejectDischargeJam)XIO(HMI_Sim_BottleMissingAtFill)OTE(Sys_Sts_InjectionsClear);]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[XIO(HMI_Cmd_Start)XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_LoadBottle)XIO(HMI_Cmd_ClearCell)XIO(HMI_Cmd_ConveyorJog)XIO(HMI_Cmd_FillValveOpen)XIO(HMI_Cmd_RejectExtend)OTE(Recovery_CommandsReleased);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[EQU(Production_Sts_SequenceState,0)XIO(Sim_In_IndexComplete)OTE(Recovery_PhaseClear);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment>
+<![CDATA[Reset is separate from Clear Cell and Start. Shared by every fault owner.]]>
+</Comment>
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)EQU(Sys_Sts_MachineState,30)XIC(Sys_Sts_EquipmentHome)XIC(Sys_Sts_CellEmpty)XIC(Sys_Sts_InjectionsClear)XIC(Recovery_CommandsReleased)XIC(Recovery_PhaseClear)XIC(ConfigurationValid)OTE(Sys_Sts_ResetAllowed);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[NEQ(Filling_Sts_State,20)NEQ(Filling_Sts_State,30)NEQ(Inspection_Sts_State,20)NEQ(Exit_Sts_State,20)NEQ(Exit_Sts_State,30)NEQ(Exit_Sts_State,40)NEQ(Exit_Sts_State,50)OTE(Sys_Sts_OperationsIdle);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Startup_Control" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment>
+<![CDATA[Every transition to Run starts stopped and requires fresh mode/Start requests.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(S:FS)[MOV(0,Sys_Sts_MachineState) ,OTU(Sys_Sts_StartupReady) ,OTL(Startup_CheckPending) ];]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment>
+<![CDATA[Wait one complete simulation pass: photoeyes are cleared by prescan. Physical presence also catches a masked sensor.]]>
+</Comment>
+<Text>
+<![CDATA[XIC(Startup_CheckPending)XIO(S:FS)[XIC(Production_Bottles[0].Occupied) ,XIC(Production_Bottles[1].Occupied) ,XIC(Production_Bottles[2].Occupied) ,XIC(Production_Bottles[3].Occupied) ,XIC(Sim_In_EntryPE) ,XIC(Sim_In_FillPE) ,XIC(Sim_In_InspectionPE) ,XIC(Sim_In_ExitPE) ,XIC(Sim_In_GoodExitPE) ,XIC(Sim_In_RejectExitPE) ,XIC(Sim_Sts_BottlesPresent) ,NEQ(Production_Sts_SequenceState,0) NEQ(Production_Sts_SequenceState,10) ,[EQU(Filling_Sts_State,20) ,EQU(Filling_Sts_State,30) ] ,EQU(Inspection_Sts_State,20) ,[EQU(Exit_Sts_State,20) ,EQU(Exit_Sts_State,30) ,EQU(Exit_Sts_State,40) ,EQU(Exit_Sts_State,50) ] ]OTL(Production_Flt_StartupRecoveryRequired);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIC(Startup_CheckPending)XIO(S:FS)XIO(Production_Flt_StartupRecoveryRequired)[MOV(0,Production_Sts_SequenceState) ,MOV(0,Filling_Sts_State) ,MOV(0,Inspection_Sts_State) ,MOV(0,Exit_Sts_State) ];]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[XIC(Startup_CheckPending)XIO(S:FS)[OTL(Sys_Sts_StartupReady) ,OTU(Startup_CheckPending) ];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+<Routine Name="Start_Permissives" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[XIO(Sim_Out_ConveyorRun)XIO(Sim_In_ConveyorRunning)XIO(Sim_Out_FillValveOpen)XIC(Sim_In_FillValveClosed)XIO(Sim_Out_RejectExtend)XIC(Sim_In_RejectRetracted)XIO(Sim_In_RejectExtended)XIO(Sim_Out_GoodDischargeRun)OTE(Start_EquipmentReady);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[XIO(HMI_Cmd_Stop)XIO(HMI_Cmd_LoadBottle)XIO(HMI_Cmd_ClearCell)XIO(HMI_Cmd_ConveyorJog)XIO(HMI_Cmd_FillValveOpen)XIO(HMI_Cmd_RejectExtend)XIO(HMI_Cmd_Reset)OTE(Start_CommandsReleased);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[XIO(S:FS)XIC(Sys_Sts_StartupReady)XIC(Sys_Sts_AutoMode)XIO(Sys_Sts_ManualMode)EQU(Sys_Sts_MachineState,0)XIO(Sys_Sts_BlockingFault)XIC(Start_EquipmentReady)XIC(Start_CommandsReleased)OTE(Sys_Sts_StartAllowed);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+<Tasks>
+<Task Name="MainTask" Type="PERIODIC" Rate="20" Priority="10" Watchdog="500" DisableUpdateOutputs="false" InhibitTask="false">
+<ScheduledPrograms>
+<ScheduledProgram Name="Program_System"/>
+<ScheduledProgram Name="Program_Conveyor"/>
+<ScheduledProgram Name="Program_Filling"/>
+<ScheduledProgram Name="Program_Inspection"/>
+<ScheduledProgram Name="Program_Production"/>
+<ScheduledProgram Name="Program_Simulation"/>
+</ScheduledPrograms>
+</Task>
+</Tasks>
+<CommPorts>
+<SerialPort Channel="0" BaudRate="19200" Parity="No Parity" DataBits="8 Bits of Data" StopBits="1 Stop Bit" ComDriverId="DF1" RTSOffDelay="0" RTSSendDelay="0" ControlLine="No Handshake" RemoteModeChangeFlag="false" ModeChangeAttentionChar="27"
+ SystemModeCharacter="83" UserModeCharacter="85" DCDWaitDelay="0">
+<ASCII XONXOFFEnable="false" DeleteMode="0" EchoMode="0" TerminationChars="65293" AppendChars="2573" BufferSize="82"/>
+<DF1 DuplicateDetection="true" ErrorDetection="BCC Error" EmbeddedResponseEnable="Autodetect" DF1Mode="Pt to Pt" ACKTimeout="50" NAKReceiveLimit="3" ENQTransmitLimit="3" TransmitRetries="3" StationAddress="0" ReplyMessageWait="5" PollingMode="Message Based (slave can initiate messages)"
+ MasterMessageTransmit="Between station polls" NormalPollNodeFile="&lt;NA>" NormalPollGroupSize="0" PriorityPollNodeFile="&lt;NA>" ActiveStationFile="&lt;NA>" SlavePollTimeout="3000" EOTSuppression="0" MaxStationAddress="31" TokenHoldFactor="1" EnableStoreFwd="false" StoreFwdFile="&lt;NA>"
+/>
+</SerialPort>
+</CommPorts>
+<CST MasterID="0"/>
+<WallClockTime LocalTimeAdjustment="0" TimeZone="0"/>
+<Trends/>
+<DataLogs/>
+<TimeSynchronize Priority1="128" Priority2="128" PTPEnable="false"/>
+</Controller>
+</RSLogix5000Content>
